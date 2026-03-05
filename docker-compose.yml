@@ -1,0 +1,38 @@
+services:
+  likeprotech.todo-service:
+    container_name: todo-service
+    build: 
+        context: .
+        dockerfile: Infra/Dockerfile
+    environment:
+            - ConnectionStrings__DefaultConnection=Server=${DB_HOST},1433;Database=${DB_NAME};User Id=${DB_USER};Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True
+    ports:
+        - 5000:8080
+    networks:
+       - likeprotech-network
+    depends_on:
+        - likeprotech.todo-db
+
+  likeprotech.todo-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: todo-db
+    restart: unless-stopped
+    environment:
+       - ACCEPT_EULA=Y
+       - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    ports:
+      - "${MSSQL_PORT}:1433"
+    networks:
+      - likeprotech-network
+    volumes:
+      - todo_service_db:/var/opt/mssql
+      - ./Infra/Database/Migrations/database_init__v1.sql:/init.sql
+    
+
+networks:
+     likeprotech-network:
+
+volumes:
+    todo_service_db:
+        
+    

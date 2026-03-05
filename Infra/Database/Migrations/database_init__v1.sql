@@ -1,0 +1,28 @@
+CREATE DATABASE TodoDatabase;
+GO
+
+USE TodoDatabase;
+GO
+
+CREATE TABLE Todo (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Title NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    DateLimite DATETIME,
+    Status NVARCHAR(20) NOT NULL, 
+    UserId UNIQUEIDENTIFIER NOT NULL
+);
+
+
+ALTER TABLE Todo
+ADD CONSTRAINT CHK_Todo_Status CHECK (Status IN (
+    'DOING',   
+    'DONE',
+    'TODO',
+    'CANCELLED'
+));
+GO
+
+CREATE INDEX IX_Todo_UserId ON Todo(UserId);
+CREATE INDEX IX_Todo_Status ON Todo(Status);
+GO
