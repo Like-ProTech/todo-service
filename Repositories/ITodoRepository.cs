@@ -4,10 +4,10 @@ namespace Todo_Service.Repositories
 {
     public interface ITodoRepository
     {
-        List<Todo> GetAllTodos();
+        Task<List<Todo>> GetAllTodos();
         Todo GetById(string uuid);
         Boolean DeleteTodo(string uuid);
-        Boolean UpdateTodo(Todo todo);
-        Todo CreateTodo(Todo todo);
+        Task<Todo> UpdateTodo(Todo todo);
+        Task<Todo> CreateTodo(Todo todo);
     }
 }
